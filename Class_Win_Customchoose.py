@@ -1,7 +1,7 @@
 from tkinter import *
 import Ted_Qfile
 class Menu_customchoose_window:
-    customlinkmenu = Toplevel()
+    customlinkmenu = Toplevel#()##actualy inits in __init__ atm
 
     Custom_linkprefix = StringVar()
     Custom_linklen = StringVar()#IntVar()##length of link
@@ -27,6 +27,7 @@ class Menu_customchoose_window:
     #END
     
     def __init__(self):
+        self.customlinkmenu()
         self.loadcustomlink_settings()
         
         CLF = LabelFrame(self.customlinkmenu,text = 'custom link')##Custom Label Frame

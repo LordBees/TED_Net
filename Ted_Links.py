@@ -1,1 +1,1 @@
-##generated links
+##generated links ##link getters

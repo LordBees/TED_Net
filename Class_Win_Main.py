@@ -21,12 +21,19 @@ class Win_Main:
     settings = []
     ##settings do double check when adding new settings that every setting is added in all the procs properly
     #Menu_settings_window_DATA = []##global datastore for settings window maynot need as objectified
-    root = Tk()
-    linktype_Radio = IntVar()
-    linktype_Random = IntVar()
-    gennedlink = StringVar()
+    #root = Tk()
+    ##MOVED to __init__
+    #root = Toplevel()
+    #linktype_Radio = IntVar()
+    #linktype_Random = IntVar()
+    #gennedlink = StringVar()
 
     def __init__(self):
+        self.root = Tk()#Toplevel()
+        self.linktype_Radio = IntVar()
+        self.linktype_Random = IntVar()
+        self.gennedlink = StringVar()
+
         ol_LF = LabelFrame(self.root,text = 'open link')##openlink
         s_ol_LF  = LabelFrame(self.root,text = 'link')##openlink subframe forlink buttons
         lr_LF = LabelFrame(self.root,text = 'pick a link type')##linkradio
@@ -40,7 +47,7 @@ class Win_Main:
         bitly_radio = Radiobutton(lr_LF,text = 'Bit.ly',variable = self.linktype_Radio,value = 2)
         googl_radio = Radiobutton(lr_LF,text = 'goo.gl',variable = self.linktype_Radio,value = 3)
         imgur_radio = Radiobutton(lr_LF,text = 'imgur',variable = self.linktype_Radio,value = 4)
-        custom_radio = Radiobutton(lr_LF,text = 'custom',variable = self.linktype_Radio,value = 5,state= 'disabled')
+        self.custom_radio = Radiobutton(lr_LF,text = 'custom',variable = self.linktype_Radio,value = 5,state= 'disabled')
         random_chkbox = Checkbutton(lr_LF,text = 'Random!',variable = self.linktype_Random,onvalue = 1,offvalue =0)
         genlnk_Button = Button(ol_LF,command = self.genlink,text = 'generate\nlink')
         openlnk_Button = Button(ol_LF,command = self.openrng,text = 'open\nlink')
@@ -62,7 +69,7 @@ class Win_Main:
         bitly_radio.pack()
         googl_radio.pack()
         imgur_radio.pack()
-        custom_radio.pack()
+        self.custom_radio.pack()
         random_chkbox.pack()
         genlnk_Button.pack(side = LEFT)
         openlnk_Button.pack(side = LEFT)
@@ -399,5 +406,4 @@ class Win_Main:
         self.root.after(700, self.event_TED)
 
 
-    
-
+   

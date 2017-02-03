@@ -8,6 +8,7 @@ class Menu_settings_window:
     SETTINGS_filename = 'SETTINGS.CFF'
     
     def __init__(self):
+        #self.optionsmenu()
 
         self.Menu_settings_loadsettings()
         
