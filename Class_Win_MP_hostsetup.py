@@ -24,7 +24,7 @@ class Admin_Win:
         msb_ap_inf_LBL = Label(msb_LF,text = 'admin pin:')
 
         msb_Launch_BUT = Button(self.msb,text = 'launch as admin')##disabled atm
-        msb_ADMIN_BUT = Button(self.msb,text = 'Set as admin of session',command = self.SET_ADMIN_MODE)#
+        self.msb_ADMIN_BUT = Button(self.msb,text = 'Set as admin of session',command = self.SET_ADMIN_MODE,state = 'disabled')#
         msb_ERR_LBL = Label(msb_LF,textvariable = self.ERR_VAR)
 
 
@@ -36,18 +36,20 @@ class Admin_Win:
         msb_ap_LBL.pack()
         msb_ap_ENT.pack()
 
-        msb_ADMIN_BUT.pack()
+        self.msb_ADMIN_BUT.pack()
         msb_ERR_LBL.pack()
         msb_LF.pack()
 
         resp = net.URL_request_Gen()
 
         if resp[0] == 'ERROR' or (resp[0] == 'F'):
-            pass#do error label code here
+            #pass#do error label code here
+            self.ERR_VAR.set('FAILED RESPONSE!')
         elif resp[0].upper() == 'S':
             print('Got AP+GP')
             self.msb_Gpin_VAR.set(resp[1])
             self.msb_Apin_VAR.set(resp[2])
+            self.msb_ADMIN_BUT.config(state = 'normal')
             #Setting.apin = 
         else:
             print('mysterious failure!')

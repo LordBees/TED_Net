@@ -1,5 +1,10 @@
 import os
 from tkinter import *
+
+#ted misc
+import Ted_Settings as Setting
+
+
 class Menu_settings_window:
     #optionsmenu = Toplevel()
 
@@ -82,7 +87,7 @@ class Menu_settings_window:
     
     def Menu_settings_wipesettings(self):##Reset config file
     #def save_file(name,data,overwrite = False,array = False):#saving funct
-        data = self.array2csv(([0]*len(settings)))
+        data = self.array2csv(([0]*len(Setting.settings)))
 
         f = open(self.SETTINGS_filename,'w')
         f.write(data)
