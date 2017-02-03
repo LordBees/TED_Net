@@ -1,0 +1,1 @@
+##main window for submitting a link to the server
