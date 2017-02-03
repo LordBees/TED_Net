@@ -1,3 +1,4 @@
+import os
 from tkinter import *
 import Ted_Qfile
 class Menu_customchoose_window:

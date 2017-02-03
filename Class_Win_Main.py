@@ -110,7 +110,7 @@ class Win_Main:
                 webbrowser.open(self.gennedlink.get())
         
     
-    def googlehome():##button funct
+    def googlehome(self):##button funct
         webbrowser.open('google.co.uk')
 
 
