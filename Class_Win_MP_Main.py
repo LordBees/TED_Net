@@ -23,12 +23,13 @@ class Win_Main_MP:
         Menu_help.add_command(label="SP help", command=Class_Win_Howto.Window)
         Menu_main.add_cascade(label = 'How To',menu = Menu_help)
 
-        self.root.config(menu=Menu_main)#title = 'Link Roulette'
+        self.This_win.config(menu=Menu_main)#title = 'Link Roulette'
         #self.This_win.title('Link Roulette')
         #self.This_win.geometry('305x300')
-        self.This_win.after(2000, self.event_TED)
+        self.This_win.after(700, self.event_TED)
+        #print('test')
         self.This_win.mainloop()
 
     def event_TED(self):
-        root.after(2000, self.event_TED)
+        self.This_win.after(700, self.event_TED)
 

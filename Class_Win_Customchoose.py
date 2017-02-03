@@ -1,7 +1,9 @@
 import os
 from tkinter import *
 import Ted_Qfile
+import Ted_Settings as Setting
 class Menu_customchoose_window:
+    #settings = []
     ##moved to __init__
     #customlinkmenu = Toplevel#()##actualy inits in __init__ atm
 
@@ -29,7 +31,9 @@ class Menu_customchoose_window:
     #END
     
     def __init__(self):
-        self.customlinkmenu()
+        #self.settings = settings_p
+
+        self.customlinkmenu = Toplevel()
         self.Custom_linkprefix = StringVar()
         self.Custom_linklen = StringVar()#IntVar()##length of link
         self.Custom_linkstart = StringVar()#IntVar()##inclusive position start of rng link so linklen = 6 linkstart = 4 so random.rng(4,6)
@@ -160,8 +164,8 @@ class Menu_customchoose_window:
         return temp
 
     def savecustomlink_settings(self):
-        global custom_radio
-        global settings
+        #global custom_radio
+        #global settings
         dat2sav = self.getsettings()
         print('~~~~####~~~~####~~~~')
         print(dat2sav)##check array handlingstuff
@@ -171,17 +175,17 @@ class Menu_customchoose_window:
         self.cls.save_customdata(dat2sav)##data is csvised internally in fileclass so no csving needed here
         print('custom state = '+str(dat2sav[4]))
         if str(dat2sav[4]) == '1':
-            custom_radio.configure(state = 'normal')
+            #custom_radio.configure(state = 'normal')
             csttg = '1'##customtoggle
         else:
             print('cstmst = disabled')
-            custom_radio.configure(state = 'disabled')
+            #custom_radio.configure(state = 'disabled')
             csttg = '0'
             
         try:
-            settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
+            Setting.settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
         except:
-            settings.append(csttg)
+            Setting.settings.append(csttg)
         
     def getsettings(self):
         returner = [
@@ -202,7 +206,7 @@ class Menu_customchoose_window:
             f = open('CUSTOM.CLF','r')
             data = f.readline()
             f.close()
-            data = csv2array(data)
+            data = self.csv2array(data)
             print(data)
         ##END
         
@@ -269,8 +273,8 @@ class Menu_customchoose_window:
             
     def save_presetdata(self):##C+p of savesettings atm nned to change ##sae individual preset file
         print('saving to preset.dat...')
-        global custom_radio
-        global settings
+        #global custom_radio
+        #global settings
         dat2sav = self.getsettings()
         if os.path.isfile('PRESET.dat'):
             if messagebox.askokcancel(title = 'confirm save',message = 'are you sure?\n this will overwrite your existing quickpreset file!'):
@@ -278,33 +282,33 @@ class Menu_customchoose_window:
                 self.clf.save_customdata(dat2sav)##data is csvised internally in fileclass so no csving needed here
                 print('custom state = '+str(dat2sav[4]))
                 if str(dat2sav[4]) == '1':
-                    custom_radio.configure(state = 'normal')
+                    #custom_radio.configure(state = 'normal')
                     csttg = '1'##customtoggle
                 else:
                     print('cstmst = disabled')
-                    custom_radio.configure(state = 'disabled')
+                    #custom_radio.configure(state = 'disabled')
                     csttg = '0'
                     
                 try:
-                    settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
+                    Setting.settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
                 except:
-                    settings.append(csttg)
+                    Setting.settings.append(csttg)
         else:##same again as only ask to replace
             dat2sav[3] = self.csv2dot(dat2sav[3])
             self.clf.save_customdata(dat2sav)##data is csvised internally in fileclass so no csving needed here
             print('custom state = '+str(dat2sav[4]))
             if str(dat2sav[4]) == '1':
-                custom_radio.configure(state = 'normal')
+                #custom_radio.configure(state = 'normal')
                 csttg = '1'##customtoggle
             else:
                 print('cstmst = disabled')
-                custom_radio.configure(state = 'disabled')
+                #custom_radio.configure(state = 'disabled')
                 csttg = '0'
                 
             try:
-                settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
+                Setting.settings[3] = csttg## if fail then append may be good idea to use 'variable type data in arrays E.G. ['Button_on = 1',"Test = '1'"] etc may help with id problems
             except:
-                settings.append(csttg)
+                Setting.settings.append(csttg)
         print('DONE!')
                     
     def delt_presetdata(self):##delete preset file

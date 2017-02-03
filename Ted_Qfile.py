@@ -19,7 +19,7 @@ class file_prog:
         
     def writefile(self,fname):##internal method for filewriting
         f = open(fname,'w')
-        f.write(array2csv(self.data))
+        f.write(self.array2csv(self.data))
         #self.data = f.readlines()
         f.close()
         #self.name = fname
@@ -63,6 +63,30 @@ class file_prog:
             else:
                 temp += strng[x]
         return temp
+
+    def array2csv(self,array):##from beelib
+            temp = ''
+            for fl in array:
+                print(fl)
+                temp += str(fl)+','
+            temp+=','
+            return temp
+    
+    def csv2array(self,csvstr):##may need os.isfile() or whatever it is to check file is in dir before declaring eofsame for array2csv      ##from beelib
+        arrayreturn = []
+        temp = ''
+        flag = False
+        for x in csvstr:#range(len(csvnames)):
+            if flag and (x==','):## ,, delimiter
+                break
+            if x ==',':
+                arrayreturn.append(temp)
+                temp = ''
+                flag = True
+            else:
+                temp+=x
+                flag = False
+        return arrayreturn
     
 class configfile_prog (file_prog):##file obj for config file
     def __init__(self):

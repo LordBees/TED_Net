@@ -37,7 +37,7 @@ def URL_request_State(gpin):#state request of game
     return URL_GetData('?f=state&gid='+gpin)
 
 def URL_join_session(gpin,name):#join game
-    jstr = '?f=join&gid='+pin+'&pname='+name
+    jstr = '?f=join&gid='+gpin+'&pname='+name
     reqd = URL_GetData(jstr)
     reqd = reqd.decode(ENCODER)
     reqd = reqd.split(',')

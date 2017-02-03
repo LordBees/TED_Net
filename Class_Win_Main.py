@@ -12,13 +12,15 @@ import Class_Win_Howto,Class_Win_MP_Howto
 
 #ted misc
 import Ted_Qfile
+import Ted_Settings as Setting
 
 class Win_Main:
     FILE_HISTORY = 'history.dat'
     vchars = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L','M','N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     history = []
     #settings in order Warn_Skiplink , History_Track , Session_History , custom button enabled?
-    settings = []
+    #settings = []##moved to Ted_settings.py
+
     ##settings do double check when adding new settings that every setting is added in all the procs properly
     #Menu_settings_window_DATA = []##global datastore for settings window maynot need as objectified
     #root = Tk()
@@ -47,14 +49,14 @@ class Win_Main:
         bitly_radio = Radiobutton(lr_LF,text = 'Bit.ly',variable = self.linktype_Radio,value = 2)
         googl_radio = Radiobutton(lr_LF,text = 'goo.gl',variable = self.linktype_Radio,value = 3)
         imgur_radio = Radiobutton(lr_LF,text = 'imgur',variable = self.linktype_Radio,value = 4)
-        self.custom_radio = Radiobutton(lr_LF,text = 'custom',variable = self.linktype_Radio,value = 5,state= 'disabled')
+        self.custom_radio = Radiobutton(lr_LF,text = 'custom',variable = self.linktype_Radio,value = 5,state = 'disabled')
         random_chkbox = Checkbutton(lr_LF,text = 'Random!',variable = self.linktype_Random,onvalue = 1,offvalue =0)
         genlnk_Button = Button(ol_LF,command = self.genlink,text = 'generate\nlink')
         openlnk_Button = Button(ol_LF,command = self.openrng,text = 'open\nlink')
         opengoogle_Button = Button(ms_LF,command = self.googlehome,text = 'google homepage')
         selectlink_Button = Button(hb_LF,command = self.setlink,text = 'select link')
         clearhistory_Button  = Button(ms_LF,command = self.clearhistory,text = 'clear history')
-        linkbox_Label = Label(s_ol_LF)
+        self.linkbox_Label = Label(s_ol_LF)
 
 
         buff = [5,5]##pixel edge buffer/offset
@@ -76,7 +78,7 @@ class Win_Main:
         opengoogle_Button.pack()
         selectlink_Button.pack()
         clearhistory_Button.pack()
-        linkbox_Label.pack(side = BOTTOM)
+        self.linkbox_Label.pack(side = BOTTOM)
         self.history_Listbox.pack(side = LEFT)
         historyscroller_Scrollbar.pack(side = RIGHT,fill = Y)
 
@@ -98,17 +100,17 @@ class Win_Main:
         self.root.config(menu=Menu_main)#title = 'Link Roulette'
         self.root.title('Link Roulette')
         self.root.geometry('305x300')
-        self.root.after(2000, self.event_TED)
+        self.root.after(700, self.event_TED)
         self.root.mainloop()
-        on_close()
+        self.on_close()
 
     def openrng(self):##button funct
         #global gennedlink
         #global settings
         print('link = ',self.gennedlink.get())
         #0 = prompt
-        print(self.settings[0])
-        if int(self.settings[0]) == 1:##functionise instead?
+        print(Setting.settings[0])
+        if int(Setting.settings[0]) == 1:##functionise instead?
             print('no prompt')
             webbrowser.open(self.gennedlink.get())
         
@@ -197,17 +199,17 @@ class Win_Main:
         if self.FILE_HISTORY in os.listdir():
             history = self.loadfile(self.FILE_HISTORY)
         else:
-            save_file(FILE_HISTORY,['the history file'])
+            self.save_file(self.FILE_HISTORY,['the history file'])
 
     
     def save_history(self):
         #global history
         #global settings
-        print(self.settings[2])
-        if int(self.settings[2]) == 1:
+        print(Setting.settings[2])
+        if int(Setting.settings[2]) == 1:
             print('not saving to disk')
         else:
-            save_file(self.FILE_HISTORY,self.history,array = True)
+            self.save_file(self.FILE_HISTORY,self.history,array = True)
 
     def refresh_Hbox(self):##refreshes listbox to update it
         self.history_Listbox.delete(0,self.history_Listbox.size())
@@ -217,7 +219,7 @@ class Win_Main:
         
     def clearhistory(self):##temp clears urlbox
         if messagebox.askokcancel(title = 'confirm clear',message = 'delete your history?'):
-            save_file(self.FILE_HISTORY,['the history file'],overwrite = False)
+            self.save_file(self.FILE_HISTORY,['the history file'],overwrite = False)
             self.history_Listbox.delete(0,self.history_Listbox.size())
             self.refresh_Hbox()
             print('cleared')
@@ -233,7 +235,7 @@ class Win_Main:
             data = self.csv2array(f.readline())
             f.close()
             #print(data)
-            self.settings = data
+            Setting.settings = data
             print ('loaded: ',data)
         if 'CUSTOM.CLF' in os.listdir():
             f = open('CUSTOM.CLF','r')
@@ -249,9 +251,9 @@ class Win_Main:
             else:
                 self.custom_radio.configure(state = 'disabled')
         
-            print(self.settings)
-            self.settings.append(str(data[4]))
-            print(self.settings)
+            print(Setting.settings)
+            Setting.settings.append(str(data[4]))
+            print(Setting.settings)
             
         
 
@@ -261,8 +263,8 @@ class Win_Main:
         #global custom_radio
         if self.linktype_Random.get() == 1:
             #if custom_radio ==
-            print('settings[3] == '+str(self.settings[3]))
-            if self.settings[3] == '1':
+            print('settings[3] == '+str(Setting.settings[3]))
+            if Setting.settings[3] == '1':
                 self.linktype_Radio.set(random.randint(1,(button_num+1)))
             else:
                 self.linktype_Radio.set(random.randint(1,button_num))##randomises the link(change values to allow for all radios(UPDATE)
@@ -286,7 +288,7 @@ class Win_Main:
             elif self.linktype_Radio.get() ==  5:
                 self.gennedlink.set(self.get_custom())
             
-            if int(self.settings[1]) == 1:##skips saving link to array and disk
+            if int(Setting.settings[1]) == 1:##skips saving link to array and disk
                 print('skipped saving history')
             else:
                 self.history.append(self.gennedlink.get())
@@ -297,7 +299,8 @@ class Win_Main:
         
     def setlink(self):
         #global history_listbox
-        if self.history_Listbox.curselection() == None:##checks if valid
+        #print(self.history_Listbox.curselection())
+        if self.history_Listbox.curselection() == ():##checks if valid EDIT: changed from None to () so type comparison the same
             pass
         else:
             self.gennedlink.set(self.history_Listbox.get(self.history_Listbox.curselection()))
@@ -308,7 +311,7 @@ class Win_Main:
         link = ''
         leng = random.randint(4,6)#4-6 chars
         for x in range(0,leng):
-            link+=vchars[random.randint(0,len(vchars))]
+            link+=self.vchars[random.randint(0,len(self.vchars))]
         return 'http://tinyurl.com/'+link
 
 
@@ -316,7 +319,7 @@ class Win_Main:
         link = ''
         leng = random.randint(4,6)#4-6 chars
         for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-            link+=vchars[random.randint(0,len(vchars))]
+            link+=self.vchars[random.randint(0,len(self.vchars))]
         return 'http://bit.ly/'+link
 
 
@@ -324,7 +327,7 @@ class Win_Main:
         link = ''
         leng = 7##7 imgur has fixed 7charsrandom.randint(4,6)#4-6 chars
         for x in range(0,leng):
-            link+=vchars[random.randint(0,len(vchars))]
+            link+=self.vchars[random.randint(0,len(self.vchars))]
         return 'http://goo.gl/'+link
 
     ##image sites
@@ -332,7 +335,7 @@ class Win_Main:
         link = ''
         leng = random.randint(4,7)#4-6 chars
         for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-            link+=vchars[random.randint(0,len(vchars))]
+            link+=self.vchars[random.randint(0,len(self.vchars))]
         return 'http://i.imgur.com/'+link##+'.jpg'##check format may need detecting from file
 
     ##custom
@@ -352,7 +355,7 @@ class Win_Main:
             link = ''
             leng = random.randint(int(data[2]),int(data[1]))#chars
             for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-                link+=data[3][random.randint(0,len(vchars))]
+                link+=data[3][random.randint(0,len(self.vchars))]
             return data[0]+link##+'.jpg'##check format may need detecting from file
     
     def on_run(self):##bootup setup
@@ -408,7 +411,14 @@ class Win_Main:
 
     def event_TED(self):##custom event loop
         ##event code here##
-    
+        try:
+            if str(Setting.settings[3]) == '1':
+                self.custom_radio.configure(state = 'normal')
+                print('norm',Setting.settings[3])
+            else:
+                self.custom_radio.configure(state = 'disabled')
+        except:
+            print(Setting.settings)
         ##END EVENT CODE##
         self.root.after(700, self.event_TED)
 

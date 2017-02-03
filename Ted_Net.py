@@ -29,3 +29,6 @@ D_label.pack()#description label
 SP_Button.pack()#sp button
 MP_Button.pack()#mp button
 root.mainloop()
+
+
+###check settings in sub windows now as settings is just in the main window(will set as arg for instanciation atm)
