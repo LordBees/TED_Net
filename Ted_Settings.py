@@ -8,6 +8,7 @@ pname = ''
 apin = ''
 ADMIN = False##temp added
 
+#quick method for resetting state
 def reset():
     global ppin
     global gpin
