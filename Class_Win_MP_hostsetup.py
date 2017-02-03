@@ -61,3 +61,4 @@ class Admin_Win:
         Setting.apin = self.msb_Apin_VAR.get()
         Setting.gpin = self.msb_Gpin_VAR.get()
         self.ERR_VAR.set('ADMIN MODE')
+        #self.msb.destroy()

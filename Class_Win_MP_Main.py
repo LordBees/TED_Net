@@ -9,7 +9,7 @@ class Win_Main_MP:
 
     ##
     def __init__(self):
-        self.This_win = Toplevel()
+        self.This_win = Tk()
         self.This_win.title('Link Roulette - Session')#add id to this
         self.This_win.geometry('305x300')
 
@@ -32,4 +32,4 @@ class Win_Main_MP:
 
     def event_TED(self):
         self.This_win.after(700, self.event_TED)
-
+#Win_Main_MP()##testing

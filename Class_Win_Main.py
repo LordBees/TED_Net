@@ -11,7 +11,7 @@ import Class_Win_Howto,Class_Win_MP_Howto
 ##end
 
 #ted misc
-import Ted_Qfile
+import Ted_Qfile,Ted_Links
 import Ted_Settings as Setting
 
 class Win_Main:
@@ -278,15 +278,15 @@ class Win_Main:
                 ##linktype_Radio.set(random.randint(1,3))##randomises the link(change values to allow for all radios(UPDATE)
                 ##genlink()
             if self.linktype_Radio.get()   ==  1:
-                self.gennedlink.set(self.get_tinyurl())##eg http://tinyurl.com/DlJzJ
+                self.gennedlink.set(Ted_Links.get_tinyurl())##eg http://tinyurl.com/DlJzJ
             elif self.linktype_Radio.get() ==  2:
-                self.gennedlink.set(self.get_BitLy())
+                self.gennedlink.set(Ted_Links.get_BitLy())
             elif self.linktype_Radio.get() ==  3:
-                self.gennedlink.set(self.get_googl())
+                self.gennedlink.set(Ted_Links.get_googl())
             elif self.linktype_Radio.get() ==  4:
-                self.gennedlink.set(self.get_imgur())
+                self.gennedlink.set(Ted_Links.get_imgur())
             elif self.linktype_Radio.get() ==  5:
-                self.gennedlink.set(self.get_custom())
+                self.gennedlink.set(Ted_Links.get_custom())
             
             if int(Setting.settings[1]) == 1:##skips saving link to array and disk
                 print('skipped saving history')
@@ -307,56 +307,8 @@ class Win_Main:
             self.linkbox_Label.config(text = str(self.gennedlink.get()))
 
 
-    def get_tinyurl(self):   
-        link = ''
-        leng = random.randint(4,6)#4-6 chars
-        for x in range(0,leng):
-            link+=self.vchars[random.randint(0,len(self.vchars))]
-        return 'http://tinyurl.com/'+link
-
-
-    def get_BitLy(self):
-        link = ''
-        leng = random.randint(4,6)#4-6 chars
-        for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-            link+=self.vchars[random.randint(0,len(self.vchars))]
-        return 'http://bit.ly/'+link
-
-
-    def get_googl(self):
-        link = ''
-        leng = 7##7 imgur has fixed 7charsrandom.randint(4,6)#4-6 chars
-        for x in range(0,leng):
-            link+=self.vchars[random.randint(0,len(self.vchars))]
-        return 'http://goo.gl/'+link
-
-    ##image sites
-    def get_imgur(self):
-        link = ''
-        leng = random.randint(4,7)#4-6 chars
-        for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-            link+=self.vchars[random.randint(0,len(self.vchars))]
-        return 'http://i.imgur.com/'+link##+'.jpg'##check format may need detecting from file
-
-    ##custom
-    def get_custom(self):##youtube thing bndPy1MHm8E
-        f = open('CUSTOM.CLF','r')
-        dat = f.readline()
-        f.close()
-        data = self.csv2array(dat)##to solve type prob
-        print('//##//\n',data,'\n\\##\\')
-        #data = csv2array(dat)
-        print(data[3])
-        print(self.dot2csv(data[3]))
-        data[3] = self.csv2array(self.dot2csv(data[3]))
-        print('\n\n//##//\n',data,'\n\\##\\')
-        enabled = data[4]
-        if enabled  == 1 or '1':
-            link = ''
-            leng = random.randint(int(data[2]),int(data[1]))#chars
-            for x in range(0,leng):##can be longer as https://bit.ly/zzzzzzzzzzzzzzzzz is valid
-                link+=data[3][random.randint(0,len(self.vchars))]
-            return data[0]+link##+'.jpg'##check format may need detecting from file
+##link was here
+##
     
     def on_run(self):##bootup setup
         self.load_history()

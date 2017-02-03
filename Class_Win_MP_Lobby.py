@@ -100,7 +100,7 @@ class Win_MP_Lobby:
         else:
             print('mysterious failure!')
 
-    def prepgamejoin_admin(self):##unfinished
+    def prepgamejoin_admin(self):#qjoin as admin ##unfinished
         if Setting.ADMIN == True:
             if resp[0] == 'ERROR' or (resp[0] == 'F'):
                 pass#do error label code here
