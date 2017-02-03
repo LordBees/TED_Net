@@ -6,7 +6,7 @@ from tkinter import messagebox
 #options menu wins
 import Class_Win_Options, Class_Win_Customchoose
 #help menu wins
-import Class_Win_Howto
+import Class_Win_Howto,Class_Win_MP_Howto
 #
 ##end
 
@@ -86,6 +86,13 @@ class Win_Main:
         Menu_settings.add_command(label="options", command=Class_Win_Options.Menu_settings_window)
         Menu_settings.add_command(label="custom link", command=Class_Win_Customchoose.Menu_customchoose_window)
         Menu_main.add_cascade(label = 'options',menu = Menu_settings)
+
+        Menu_help = Menu(Menu_main,tearoff = 0)
+        #Menu_settings = Menu(menubar, tearoff=0)
+        Menu_help.add_command(label="SP help", command=Class_Win_Howto.Window)##sp at top as more relavent to this window
+        Menu_help.add_command(label="MP help", command=Class_Win_MP_Howto.Window)
+        Menu_main.add_cascade(label = 'How To',menu = Menu_help)
+
         #Menu_main.add_command(label="preview", command=Menu_preview_window)
         self.on_run()
         self.root.config(menu=Menu_main)#title = 'Link Roulette'

@@ -1,4 +1,4 @@
-#help window for how to use singleplayer mode
+#help window for how to use and connect to party mode
 import tkinter as TK
 
 class Window:
@@ -9,13 +9,13 @@ class Window:
         self.Drop_help_facts()
 
     def Drop_help_facts(self):
-        helptext = ['How to use LinkRoulette v1'
+        helptext = ['How to use LinkRoulette - Party v1'
                     ] ##may want a seperate file for help
         ##helpwin = TK.Tk()##debigging win as seperate entity
         helpwin = TK.Toplevel()
         helpwin.title("useful information")
         helpwin.geometry('320x480')
-        helpwin_lblframe = TK.LabelFrame(helpwin, text="User guide for SP")
+        helpwin_lblframe = TK.LabelFrame(helpwin, text="User Guide for MP")
         helpwin_lblframe.pack(fill="both", expand="yes")
      
         helpwin_scroll = TK.Scrollbar(helpwin_lblframe)
