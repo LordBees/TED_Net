@@ -2,19 +2,20 @@ import os
 from tkinter import *
 import Ted_Qfile
 class Menu_customchoose_window:
-    customlinkmenu = Toplevel#()##actualy inits in __init__ atm
+    ##moved to __init__
+    #customlinkmenu = Toplevel#()##actualy inits in __init__ atm
 
-    Custom_linkprefix = StringVar()
-    Custom_linklen = StringVar()#IntVar()##length of link
-    Custom_linkstart = StringVar()#IntVar()##inclusive position start of rng link so linklen = 6 linkstart = 4 so random.rng(4,6)
-    Custom_charset = StringVar()##csv input string for custom chars
-    Custom_enable = IntVar()
+    #Custom_linkprefix = StringVar()
+    #Custom_linklen = StringVar()#IntVar()##length of link
+    #Custom_linkstart = StringVar()#IntVar()##inclusive position start of rng link so linklen = 6 linkstart = 4 so random.rng(4,6)
+    #Custom_charset = StringVar()##csv input string for custom chars
+    #Custom_enable = IntVar()
     
     cls = Ted_Qfile.customfile_prog()##customlinkstorage ##data for the custom link
     clf = Ted_Qfile.customlinkfile_prog()##custom link quick load file
 
     ##defs
-    Custom_charset.set('0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,,')
+    #Custom_charset.set('0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,,')
     EVENTLOOP_TIC = 700
     ##END
     
@@ -29,6 +30,14 @@ class Menu_customchoose_window:
     
     def __init__(self):
         self.customlinkmenu()
+        self.Custom_linkprefix = StringVar()
+        self.Custom_linklen = StringVar()#IntVar()##length of link
+        self.Custom_linkstart = StringVar()#IntVar()##inclusive position start of rng link so linklen = 6 linkstart = 4 so random.rng(4,6)
+        self.Custom_charset = StringVar()##csv input string for custom chars
+        self.Custom_enable = IntVar()
+
+        self.Custom_charset.set('0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,,')
+
         self.loadcustomlink_settings()
         
         CLF = LabelFrame(self.customlinkmenu,text = 'custom link')##Custom Label Frame

@@ -1,15 +1,20 @@
 import os
 from tkinter import *
 class Menu_settings_window:
-    optionsmenu = Toplevel()
+    #optionsmenu = Toplevel()
 
-    Warn_Skiplink = IntVar()##settings[0]
-    History_Track = IntVar()##settings[1]
-    Session_History = IntVar()##settings[2]
+    #Warn_Skiplink = IntVar()##settings[0]
+    #History_Track = IntVar()##settings[1]
+    #Session_History = IntVar()##settings[2]
     SETTINGS_filename = 'SETTINGS.CFF'
     
     def __init__(self):
         #self.optionsmenu()
+        self.optionsmenu = Toplevel()
+
+        self.Warn_Skiplink = IntVar()##settings[0]
+        self.History_Track = IntVar()##settings[1]
+        self.Session_History = IntVar()##settings[2]
 
         self.Menu_settings_loadsettings()
         
