@@ -48,7 +48,7 @@ def URL_join_session(gpin,name):#join game
 
 
 def URL_sublink(gpin,ppin,lnk):#submit a link
-    jstr = '?f=link&gid='+gpin+'&pid'+ppin+'&pl='+lnk
+    jstr = '?f=link&gid='+gpin+'&pid='+ppin+'&pl='+lnk
     reqd = URL_GetData(jstr)
     reqd = reqd.decode(ENCODER)
     reqd = reqd.split(',')
