@@ -95,6 +95,26 @@ def URL_newround(gpin,ppin):
         return ['ERROR',reqd]#debugginf
     else:
         return reqd
+
+def URL_closesession(gpin,apin):
+    jstr = '?f=close&gid='+gpin+'&pin='+apin
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_getlinks(gpin):
+    jstr = '?f=list&gid='+gpin+'&l=glinks'
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
     
 def get_state_desc(gs):#debug
     gst = [ 'Session is live and players can join',
