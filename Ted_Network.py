@@ -56,7 +56,46 @@ def URL_sublink(gpin,ppin,lnk):#submit a link
         return ['ERROR',reqd]#debugginf
     else:
         return reqd
-
+def URL_votelink(gpin,ppin,voteno):
+    jstr = '?f=vote&gid='+gpin+'&pid='+ppin+'&v='+voteno
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_leavegame(gpin,ppin):
+    jstr = '?f=leav&gid='+gpin+'&pid='+ppin
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_getwinning(gpin):
+    jstr = '?f=winn&gid='+gpin
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_newround(gpin,ppin):
+    jstr = '?f=nrnd&gid='+gpin+'&pid='+ppin
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
 def get_state_desc(gs):#debug
     gst = [ 'Session is live and players can join',
             'Players can no longer join and need to submit a link',
