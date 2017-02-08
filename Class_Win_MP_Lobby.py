@@ -27,6 +27,7 @@ class Win_MP_Lobby:
         self.G_join_ent_var = StringVar()
         self.G_pname_ent_var = StringVar()
         self.G_Aname_lbl_VAR = StringVar()
+        self.G_ERR_LBL_VAR = StringVar()
         ##end
 
         ##widgets
@@ -40,6 +41,7 @@ class Win_MP_Lobby:
         G_pname_lbl = Label(self.This_win,text = 'enter name for game')
 
         G_Aname_lbl = Label(self.This_win,textvariable = self.G_Aname_lbl_VAR)#,text = 'enter name for game')
+        G_ERR_LBL = Label(self.This_win,textvariable = self.G_ERR_LBL_VAR) 
 
         G_join_lbl.pack()
         G_join_ent.pack()
@@ -50,6 +52,7 @@ class Win_MP_Lobby:
 
         G_Aname_lbl.pack()
         G_join_but.pack()
+        G_ERR_LBL.pack()
 
         Menu_main = Menu(self.This_win)
         Menu_help = Menu(Menu_main,tearoff = 0)
@@ -87,16 +90,25 @@ class Win_MP_Lobby:
 
         resp = net.URL_join_session(gpin,name)
 
-        if resp[0] == 'ERROR' or (resp[0] == 'F'):
+        if gpin == '':
+            print('no game pin entered!')
+            self.G_ERR_LBL_VAR.set('ERR: No Game pin entered!')
+
+        elif resp[0] == 'ERROR' or (resp[0] == 'F'):
             pass#do error label code here
+        
         elif resp[0].upper() == 'S':
-            print('Joining game:'+gpin+'as'+str(name))
-            Setting.gpin = gpin
-            Setting.ppin = str(resp[1])
-            Setting.pname = name
-            ##self.This_win.after_cancel()
-            self.This_win.destroy()#destroy the setup win
-            Class_Win_MP_Main.Win_Main_MP()##start up window
+            if name == '':
+                print('no name entered!')
+                self.G_ERR_LBL_VAR.set('ERR: No Name Entered!')
+            else:
+                print('Joining game:'+gpin+'as'+str(name))
+                Setting.gpin = gpin
+                Setting.ppin = str(resp[1])
+                Setting.pname = name
+                ##self.This_win.after_cancel()
+                self.This_win.destroy()#destroy the setup win
+                Class_Win_MP_Main.Win_Main_MP()##start up window
         else:
             print('mysterious failure!')
 

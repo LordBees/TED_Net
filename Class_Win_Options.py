@@ -4,6 +4,8 @@ from tkinter import *
 #ted misc
 import Ted_Settings as Setting
 
+import BeeLibv3 as Blib
+
 
 class Menu_settings_window:
     #optionsmenu = Toplevel()
@@ -53,7 +55,7 @@ class Menu_settings_window:
     def Menu_settings_loadsettings(self):
         if 'SETTINGS.CFF' in os.listdir():
             f  = open(self.SETTINGS_filename,'r+')
-            data = self.csv2array(f.readline())
+            data = Blib.csv2array(f.readline())
             print(data)
             f.close()
             self.Warn_Skiplink.set(data[0])
@@ -67,7 +69,7 @@ class Menu_settings_window:
         
     def Menu_settings_savesettings(self):##saves settings to SETTINGS.CFF
         #def save_file(name,data,overwrite = False,array = False):#saving funct
-        data = self.array2csv(self.Menu_settings_getsettings())
+        data = Blib.array2csv(self.Menu_settings_getsettings())
 
         f = open(self.SETTINGS_filename,'w')
         f.write(data)
@@ -87,7 +89,7 @@ class Menu_settings_window:
     
     def Menu_settings_wipesettings(self):##Reset config file
     #def save_file(name,data,overwrite = False,array = False):#saving funct
-        data = self.array2csv(([0]*len(Setting.settings)))
+        data = Blib.array2csv(([0]*len(Setting.settings)))
 
         f = open(self.SETTINGS_filename,'w')
         f.write(data)
@@ -109,28 +111,4 @@ class Menu_settings_window:
             f.write('The History File')
             f.close()##use mega for packing a backup?
         print('wipe complete')
-    ###these really shouldnt be here..
-    def array2csv(self,array):##from beelib
-        temp = ''
-        for fl in array:
-            print(fl)
-            temp += str(fl)+','
-        temp+=','
-        return temp
     
-    def csv2array(self,csvstr):##may need os.isfile() or whatever it is to check file is in dir before declaring eofsame for array2csv      ##from beelib
-        arrayreturn = []
-        temp = ''
-        flag = False
-        for x in csvstr:#range(len(csvnames)):
-            if flag and (x==','):## ,, delimiter
-                break
-            if x ==',':
-                arrayreturn.append(temp)
-                temp = ''
-                flag = True
-            else:
-                temp+=x
-                flag = False
-        return arrayreturn
-    ###

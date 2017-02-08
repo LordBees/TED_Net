@@ -4,6 +4,9 @@ from tkinter import *
 #help menu wins
 import Class_Win_Howto,Class_Win_MP_Howto
 
+#menus
+import Class_Win_MP_Customchoose
+
 class Win_Main_MP:
     ##
 
@@ -22,6 +25,8 @@ class Win_Main_MP:
         Menu_help.add_command(label="MP help", command=Class_Win_MP_Howto.Window)##mp at top as more relavent to this window
         Menu_help.add_command(label="SP help", command=Class_Win_Howto.Window)
         Menu_main.add_cascade(label = 'How To',menu = Menu_help)
+        Menu_settings = Menu(Menu_main,tearoff = 0)
+        #Menu_settings.add_command(label="custom link", command=Class_Win_MP_Customchoose.Menu_customchoose_window)
 
         self.This_win.config(menu=Menu_main)#title = 'Link Roulette'
         #self.This_win.title('Link Roulette')
