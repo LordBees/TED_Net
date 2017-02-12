@@ -34,7 +34,15 @@ def URL_request_Gen():#gens link
 
 def URL_request_State(gpin):#state request of game
     #return URL_GetData(url = SERVER+'?f=state')
-    return URL_GetData('?f=state&gid='+gpin)
+    #return URL_GetData('?f=state&gid='+gpin)
+    jstr = '?f=state&gid='+gpin
+    reqd = URL_GetData(jstr)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.split(',')
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
 
 def URL_join_session(gpin,name):#join game
     jstr = '?f=join&gid='+gpin+'&pname='+name

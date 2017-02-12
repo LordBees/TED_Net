@@ -1,5 +1,8 @@
 ##main window for submitting a link to the server/gamestate
+##usual
+import webbrowser
 from tkinter import *
+from tkinter import messagebox
 
 #help menu wins
 import Class_Win_Howto,Class_Win_MP_Howto
@@ -7,8 +10,12 @@ import Class_Win_Howto,Class_Win_MP_Howto
 #menus
 import Class_Win_MP_Customchoose,Class_Win_MP_mpgameinfo
 
+#wins
+import Class_Win_MP_Lobby
+
 #ted misc
-import Ted_Links
+import Ted_Links,Ted_Network
+import Ted_Settings as Setting
 
 class Win_Main_MP:
     ##
@@ -23,6 +30,8 @@ class Win_Main_MP:
         self.linktype_Radio = IntVar()
         self.linktype_Random = IntVar()
         self.gennedlink = StringVar()
+        #voting
+        self.linkvote_Radio = IntVar()
         #end
 
         ##widgets
@@ -33,6 +42,7 @@ class Win_Main_MP:
         imgur_radio = Radiobutton(self.SendLink_LF,text = 'imgur',variable = self.linktype_Radio,value = 4)
         self.custom_radio = Radiobutton(self.SendLink_LF,text = 'custom',variable = self.linktype_Radio,value = 5,state = 'disabled')
         random_chkbox = Checkbutton(self.SendLink_LF,text = 'Random!',variable = self.linktype_Random,onvalue = 1,offvalue =0)
+        #genl_link_BUT = Button(self.SendLink_LF,text = 'generate a link',command = self.linkgenner)
         pick_link_BUT = Button(self.SendLink_LF,text = 'PICK!',command = self.linkpicker)
         pick_link_LBL = Label(self.SendLink_LF,text = 'your link:')
         picked_link_LBL = Label(self.SendLink_LF,text = '',textvariable = self.gennedlink)
@@ -43,7 +53,15 @@ class Win_Main_MP:
         votelink_LF_LBL = Label(self.votelink_LF,text ='pick a link')
         votelink_refresh_BUT = Button(self.votelink_LF,text =' refresh entries',command = self.regetlinks)
 
+        link1_radio = Radiobutton(self.votelink_LF,text = 'tinyurl',variable = self.linkvote_Radio,value = 1)
+        link2_radio = Radiobutton(self.votelink_LF,text = 'Bit.ly',variable = self.linkvote_Radio,value = 2)
+        link3_radio = Radiobutton(self.votelink_LF,text = 'goo.gl',variable = self.linkvote_Radio,value = 3)
+        link4_radio = Radiobutton(self.votelink_LF,text = 'imgur',variable = self.linkvote_Radio,value = 4)
+        link5_radio = Radiobutton(self.votelink_LF,text = 'goo.gl',variable = self.linkvote_Radio,value = 5)
+        link6_radio = Radiobutton(self.votelink_LF,text = 'imgur',variable = self.linkvote_Radio,value = 6)
+
         misc_LF = LabelFrame(self.This_win,text = 'misc')
+        self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_session,state = DISABLED)
 
         #packing
         self.SendLink_LF.pack()
@@ -62,6 +80,15 @@ class Win_Main_MP:
         self.votelink_LF.pack()
         votelink_LF_LBL.pack()
         votelink_refresh_BUT.pack()
+        link1_radio.pack()
+        link2_radio.pack()
+        link3_radio.pack()
+        link4_radio.pack()
+        link5_radio.pack()
+        link6_radio.pack()
+
+        misc_LF.pack()
+        self.ADMIN_closesession_BUT.pack()
         
         ##end
         Menu_main = Menu(self.This_win)
@@ -89,10 +116,28 @@ class Win_Main_MP:
     def event_TED(self):
         ##print(self.gennedlink.get())
         ##print(self.linktype_Radio.get())
+        gamestate = str(Ted_Network.URL_request_State(Setting.gpin))
+        print('state:',gamestate)
+        gamestate = str(gamestate[0])
+        if gamestate == '0':
+            pass
+        elif gamestate == '1':
+            pass
+        elif gamestate == '2':
+            pass
+        elif gamestate == '3':
+            pass
+        elif gamestate == '4':
+            pass
+        else:
+            print('gamestate error')
+
         self.This_win.after(700, self.event_TED)
 
     def do_Setup(self):##preloop stuff
         self.disable_voting()
+        if Setting.ADMIN == True:
+            self.ADMIN_closesession_BUT.config(state = 'normal')
 
     def linkpicker(self):
         #global settings
@@ -156,14 +201,47 @@ class Win_Main_MP:
             child.configure(state='disable')
 
     def sublink_proc(self):
+        sub = Ted_Network.URL_sublink(Setting.gpin,Setting.ppin,self.gennedlink.get())
+        print(sub)
         if self.gennedlink.get() == '':
             #pass
             print('error:!nolink!')
-        else:
+        elif sub[0] == 'ERROR':
+            print('error with link\nEDAT==========================\n')
+            print(sub)
+        #else:
+        elif sub[0].upper() == 'S':
             self.disable_gen()
             self.enable_voting()
+        else:
+            print('error occurred')
+            print('sub',sub)
 
     def regetlinks(Self):
         pass
 
-Win_Main_MP()##testing
+    def openrng(self):##button funct
+        #global gennedlink
+        #global settings
+        print('link = ',self.gennedlink.get())
+        #0 = prompt
+        print(Setting.mp_prompt)
+        #if int(Setting.settings[0]) == 1:##functionise instead?
+        if Setting.mp_prompt == False:
+            print('no prompt')
+            webbrowser.open(self.gennedlink.get())
+        
+        else:
+            if messagebox.askokcancel(title = 'confirm open',message = 'are you sure\nthere is NO guaruntee the link will be safe!'):
+                webbrowser.open(self.gennedlink.get())
+
+    def close_session(self):
+        Ted_Network.URL_closesession(Setting.gpin,Setting.apin)
+        self.This_win.destroy()
+
+    def process_newround(self):
+        Class_Win_MP_Lobby.Win_MP_Lobby()##temp logical will replace with rejoin screen
+        self.This_win.destroy()
+
+
+##Win_Main_MP()##testing

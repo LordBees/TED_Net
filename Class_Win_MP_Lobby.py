@@ -11,6 +11,7 @@ import Class_Win_MP_Main,Class_Win_MP_hostsetup
 ##tedutils
 import Ted_Network as net
 import Ted_Settings as Setting
+import Ted_Qname as QName
 
 class Win_MP_Lobby:
     ##
@@ -34,11 +35,12 @@ class Win_MP_Lobby:
         #G_host_but = Button(self.This_win,text = 'Host a game!')
 
         G_join_but = Button(self.This_win,text = 'Join!',command = self.prepgamejoin)
+        G_Prnd_but = Button(self.This_win,text = 'Generate random name!',command = self.Gen_P_NAME)
         G_join_ent = Entry(self.This_win,textvariable = self.G_join_ent_var)
         G_join_lbl = Label(self.This_win,text = 'enter pin to join a multiplayer game')
 
         G_pname_ent = Entry(self.This_win,textvariable = self.G_pname_ent_var)
-        G_pname_lbl = Label(self.This_win,text = 'enter name for game')
+        G_pname_lbl = Label(self.This_win,text = 'enter a username for game')#'enter name for game'
 
         G_Aname_lbl = Label(self.This_win,textvariable = self.G_Aname_lbl_VAR)#,text = 'enter name for game')
         G_ERR_LBL = Label(self.This_win,textvariable = self.G_ERR_LBL_VAR) 
@@ -52,6 +54,7 @@ class Win_MP_Lobby:
 
         G_Aname_lbl.pack()
         G_join_but.pack()
+        G_Prnd_but.pack()
         G_ERR_LBL.pack()
 
         Menu_main = Menu(self.This_win)
@@ -125,5 +128,11 @@ class Win_MP_Lobby:
                 Class_Win_MP_Main.Win_Main_MP()##start up window
             else:
                 print('mysterious failure!')
+
+    def Gen_P_NAME(self):
+        name = QName.genname()
+        self.G_pname_ent_var.set(name)
+        #Setting.pname = name##testing only
+
 
    

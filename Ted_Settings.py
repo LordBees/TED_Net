@@ -7,6 +7,7 @@ gpin = ''
 pname = ''
 apin = ''
 ADMIN = False##temp added
+mp_prompt = True
 
 #quick method for resetting state
 def reset():
