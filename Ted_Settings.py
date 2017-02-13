@@ -8,6 +8,7 @@ pname = ''
 apin = ''
 ADMIN = False##temp added
 mp_prompt = True
+InGame = False
 
 #quick method for resetting state
 def reset():

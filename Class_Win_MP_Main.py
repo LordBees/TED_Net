@@ -112,6 +112,9 @@ class Win_Main_MP:
         self.This_win.after(700, self.event_TED)
         #print('test')
         self.This_win.mainloop()
+    def __del__(self):
+        if Setting.InGame == True:
+            self.leavesession()
 
     def event_TED(self):
         ##print(self.gennedlink.get())
@@ -242,6 +245,14 @@ class Win_Main_MP:
     def process_newround(self):
         Class_Win_MP_Lobby.Win_MP_Lobby()##temp logical will replace with rejoin screen
         self.This_win.destroy()
+    
+        def leavesession(self):
+            if messagebox.askokcancel('Are you sure?','leave session?'):
+                xd = Ted_Network.URL_leavegame(Setting.gpin,Setting.ppin)
+                print('left session: data',xd)
+                self.This_win.destroy()
+
+
 
 
 ##Win_Main_MP()##testing

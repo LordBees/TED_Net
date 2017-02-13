@@ -34,7 +34,7 @@ class Win_MP_Lobby:
         ##widgets
         #G_host_but = Button(self.This_win,text = 'Host a game!')
 
-        G_join_but = Button(self.This_win,text = 'Join!',command = self.prepgamejoin)
+        G_join_but = Button(self.This_win,text = 'Join!',command = self.choose_joinmode)# self.prepgamejoin)
         G_Prnd_but = Button(self.This_win,text = 'Generate random name!',command = self.Gen_P_NAME)
         G_join_ent = Entry(self.This_win,textvariable = self.G_join_ent_var)
         G_join_lbl = Label(self.This_win,text = 'enter pin to join a multiplayer game')
@@ -86,6 +86,12 @@ class Win_MP_Lobby:
 
     def gethostinfo(self):
         Class_Win_MP_hostsetup.Admin_Win()
+    
+    def choose_joinmode(self):
+        if Setting.ADMIN == True:
+            self.prepgamejoin_admin()
+        else:
+            self.prepgamejoin()
 
     def prepgamejoin(self):
         name = self.G_pname_ent_var.get()
