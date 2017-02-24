@@ -6,7 +6,7 @@ from tkinter import *
 import Class_Win_Howto,Class_Win_MP_Howto
 
 ##menus
-import Class_Win_MP_Main,Class_Win_MP_hostsetup
+import Class_Win_MP_Main,Class_Win_MP_hostsetup,Class_Win_MP_Adminpregame
 
 ##tedutils
 import Ted_Network as net
@@ -81,7 +81,7 @@ class Win_MP_Lobby:
             self.G_Aname_lbl_VAR.set('ADMIN PIN: NONE')
         self.This_win.after(700,self.Event_TED)
 
-    def dn(self):
+    def dn(self):##donothing
         pass
 
     def gethostinfo(self):
@@ -89,7 +89,8 @@ class Win_MP_Lobby:
     
     def choose_joinmode(self):
         if Setting.ADMIN == True:
-            self.prepgamejoin_admin()
+            ##self.prepgamejoin()
+            self.prepgamejoin_admin()##removed for min
         else:
             self.prepgamejoin()
 
@@ -121,19 +122,48 @@ class Win_MP_Lobby:
         else:
             print('mysterious failure!')
 
-    def prepgamejoin_admin(self):#qjoin as admin ##unfinished
-        if Setting.ADMIN == True:
-            if resp[0] == 'ERROR' or (resp[0] == 'F'):
-                pass#do error label code here
-            elif resp[0].upper() == 'S':
-                print('Joining game:'+gpin+'as'+str(name)+' (admin)')
+    def prepgamejoin_admin(self):
+        name = self.G_pname_ent_var.get()
+        gpin = self.G_join_ent_var.get()
+
+        resp = net.URL_join_session(gpin,name)
+
+        if gpin == '':
+            print('no game pin entered!')
+            self.G_ERR_LBL_VAR.set('ERR: No Game pin entered!')
+
+        elif resp[0] == 'ERROR' or (resp[0] == 'F'):
+            pass#do error label code here
+        
+        elif resp[0].upper() == 'S':
+            if name == '':
+                print('no name entered!')
+                self.G_ERR_LBL_VAR.set('ERR: No Name Entered!')
+            else:
+                print('Joining game:'+gpin+'as'+str(name))
                 Setting.gpin = gpin
                 Setting.ppin = str(resp[1])
                 Setting.pname = name
+                ##self.This_win.after_cancel()
                 self.This_win.destroy()#destroy the setup win
-                Class_Win_MP_Main.Win_Main_MP()##start up window
-            else:
-                print('mysterious failure!')
+                ##Class_Win_MP_Main.Win_Main_MP()##start up window
+                Class_Win_MP_Adminpregame.Win_Main()
+        else:
+            print('mysterious failure!')
+
+    #def prepgamejoin_admin(self):#qjoin as admin ##unfinished
+    #    if Setting.ADMIN == True:
+    #        if resp[0] == 'ERROR' or (resp[0] == 'F'):
+    #            pass#do error label code here
+    #        elif resp[0].upper() == 'S':
+    #            print('Joining game:'+gpin+'as'+str(name)+' (admin)')
+    #            Setting.gpin = gpin
+    #            Setting.ppin = str(resp[1])
+    #            Setting.pname = name
+    #            self.This_win.destroy()#destroy the setup win
+    #            Class_Win_MP_Main.Win_Main_MP()##start up window
+    #        else:
+    #            print('mysterious failure!')
 
     def Gen_P_NAME(self):
         name = QName.genname()

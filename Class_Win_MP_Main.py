@@ -140,6 +140,7 @@ class Win_Main_MP:
     def do_Setup(self):##preloop stuff
         self.disable_voting()
         if Setting.ADMIN == True:
+            self.This_win.title('Link Roulette - Session Admin')#add id to this
             self.ADMIN_closesession_BUT.config(state = 'normal')
 
     def linkpicker(self):
@@ -248,8 +249,8 @@ class Win_Main_MP:
     
         def leavesession(self):
             if messagebox.askokcancel('Are you sure?','leave session?'):
-                xd = Ted_Network.URL_leavegame(Setting.gpin,Setting.ppin)
-                print('left session: data',xd)
+                leave_DBG = Ted_Network.URL_leavegame(Setting.gpin,Setting.ppin)
+                print('left session: data',leave_DBG)
                 self.This_win.destroy()
 
 
