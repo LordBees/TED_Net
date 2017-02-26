@@ -53,15 +53,23 @@ class Win_Main_MP:
         votelink_LF_LBL = Label(self.votelink_LF,text ='pick a link')
         votelink_refresh_BUT = Button(self.votelink_LF,text =' refresh entries',command = self.regetlinks)
 
-        link1_radio = Radiobutton(self.votelink_LF,text = 'tinyurl',variable = self.linkvote_Radio,value = 1)
-        link2_radio = Radiobutton(self.votelink_LF,text = 'Bit.ly',variable = self.linkvote_Radio,value = 2)
-        link3_radio = Radiobutton(self.votelink_LF,text = 'goo.gl',variable = self.linkvote_Radio,value = 3)
-        link4_radio = Radiobutton(self.votelink_LF,text = 'imgur',variable = self.linkvote_Radio,value = 4)
-        link5_radio = Radiobutton(self.votelink_LF,text = 'goo.gl',variable = self.linkvote_Radio,value = 5)
-        link6_radio = Radiobutton(self.votelink_LF,text = 'imgur',variable = self.linkvote_Radio,value = 6)
+        link1_radio = Radiobutton(self.votelink_LF,text = "player1's link",variable = self.linkvote_Radio,value = 1)
+        link2_radio = Radiobutton(self.votelink_LF,text = "player2's link",variable = self.linkvote_Radio,value = 2)
+        link3_radio = Radiobutton(self.votelink_LF,text = "player3's link",variable = self.linkvote_Radio,value = 3)
+        link4_radio = Radiobutton(self.votelink_LF,text = "player4's link",variable = self.linkvote_Radio,value = 4)
+        link5_radio = Radiobutton(self.votelink_LF,text = "player5's link",variable = self.linkvote_Radio,value = 5)
+        link6_radio = Radiobutton(self.votelink_LF,text = "player6's link",variable = self.linkvote_Radio,value = 6)
+
+       ## link1_lbl = Label(self.votelink_LF,text = "player1's link",variable = self.linkvote_Radio,value = 1)
+       ## link2_lbl = Label(self.votelink_LF,text = "player2's link",variable = self.linkvote_Radio,value = 2)
+       ## link3_lbl = Label(self.votelink_LF,text = "player3's link",variable = self.linkvote_Radio,value = 3)
+       ## link4_lbl = Label(self.votelink_LF,text = "player4's link",variable = self.linkvote_Radio,value = 4)
+       ## link5_lbl = Label(self.votelink_LF,text = "player5's link",variable = self.linkvote_Radio,value = 5)
+       ## link6_lbl = Label(self.votelink_LF,text = "player6's link",textvariable = self.linkvote_Radio,value = 6)
 
         misc_LF = LabelFrame(self.This_win,text = 'misc')
         self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_session,state = DISABLED)
+        self.Leave_session_BTN = Button(misc_LF,text = 'leavesession\nsession', command = self.leavesession)
 
         #packing
         self.SendLink_LF.pack()
@@ -134,6 +142,9 @@ class Win_Main_MP:
             pass
         else:
             print('gamestate error')
+        ##move into gamestate bracket when done
+        self.regetlinks()
+        ##
 
         self.This_win.after(700, self.event_TED)
 
@@ -206,7 +217,7 @@ class Win_Main_MP:
 
     def sublink_proc(self):
         sub = Ted_Network.URL_sublink(Setting.gpin,Setting.ppin,self.gennedlink.get())
-        print(sub)
+        print('subdat',sub)
         if self.gennedlink.get() == '':
             #pass
             print('error:!nolink!')
@@ -217,6 +228,7 @@ class Win_Main_MP:
         elif sub[0].upper() == 'S':
             self.disable_gen()
             self.enable_voting()
+            print('sub sucess!!')
         else:
             print('error occurred')
             print('sub',sub)
@@ -247,11 +259,17 @@ class Win_Main_MP:
         Class_Win_MP_Lobby.Win_MP_Lobby()##temp logical will replace with rejoin screen
         self.This_win.destroy()
     
-        def leavesession(self):
+    def leavesession(self):
+        if Setting.ADMIN == True:
+            if messagebox.askokcancel('Are you sure?','CLose session by leaving?'):
+                pass
+        else:
+
             if messagebox.askokcancel('Are you sure?','leave session?'):
                 leave_DBG = Ted_Network.URL_leavegame(Setting.gpin,Setting.ppin)
                 print('left session: data',leave_DBG)
                 self.This_win.destroy()
+
 
 
 
