@@ -1,6 +1,6 @@
 ##main window for submitting a link to the server/gamestate
 ##usual
-import webbrowser
+import webbrowser,random
 from tkinter import *
 from tkinter import messagebox
 
@@ -15,6 +15,7 @@ import Class_Win_MP_Lobby
 
 #ted misc
 import Ted_Links,Ted_Network
+#import Ted_Network as net
 import Ted_Settings as Setting
 
 class Win_Main_MP:
@@ -167,14 +168,16 @@ class Win_Main_MP:
         #        self.linktype_Radio.set(random.randint(1,button_num))##randomises the link(change values to allow for all radios(UPDATE)
         #        ##genlink()
         #
-        if self.linktype_Radio.get() == 0:
+        if self.linktype_Radio.get() == 0 and (self.linktype_Random.get() == 0):
             pass
             ##print('skipped generation')
 
         else:
-            ##if linktype_Radio.get() == -1:
-                ##linktype_Radio.set(random.randint(1,3))##randomises the link(change values to allow for all radios(UPDATE)
+            if self.linktype_Random.get() == 1:#if linktype_Radio.get() == -1:self.linktype_Random
+                self.linktype_Radio.set(random.randint(1,4))##randomises the link(change values to allow for all radios(UPDATE)
+                print('randommed')
                 ##genlink()
+            
             if self.linktype_Radio.get()   ==  1:
                 self.gennedlink.set(Ted_Links.get_tinyurl())##eg http://tinyurl.com/DlJzJ
             elif self.linktype_Radio.get() ==  2:
@@ -234,7 +237,9 @@ class Win_Main_MP:
             print('sub',sub)
 
     def regetlinks(Self):
-        pass
+        #data = net.URL_getlinks(Setting.gpin)
+        data = Ted_Network.URL_getlinks(Setting.gpin)
+        print(data)
 
     def openrng(self):##button funct
         #global gennedlink

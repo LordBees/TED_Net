@@ -139,7 +139,16 @@ def URL_leavegame(gpin,ppin):
     else:
         return reqd
 
-def URL_getlinks(gpin):
+def URL_listallwin():
+    jstr = '?f=list&l=win'
+    reqd = URL_GetData(jstr)
+    reqd = URL_Datproc(reqd)
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_getlinks(gpin):##test
     jstr = '?f=list&gid='+gpin+'&l=glinks'
     reqd = URL_GetData(jstr)
     reqd = URL_Datproc(reqd)
@@ -148,8 +157,37 @@ def URL_getlinks(gpin):
     else:
         return reqd
 
-def URL_getplayers(gpin,apin):
-    return['player1','player2','player3','player4','player5','player6']
+def URL_getplayers(gpin):#,apin):
+    #return['player1','player2','player3','player4','player5','player6']
+    jstr = '?f=list&l=gplayers&gid='+gpin
+    reqd = URL_GetData(jstr)
+    reqd = URL_Datproc(reqd)
+    #reqd = reqd.stri
+    reqd = reqd[1]
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+
+
+def URL_nolinks(gpin):
+    jstr = '?f=list&l=nlinks&gid=?'+gpin
+    reqd = URL_GetData(jstr)
+    reqd = URL_Datproc(reqd)
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+    
+def URL_plist(gpin):
+    jstr = '?f=list&l=nplayers&gid='+gpin
+    reqd = URL_GetData(jstr)
+    reqd = URL_Datproc(reqd)
+    if reqd[0] == 'F':
+        return ['ERROR',reqd]#debugginf
+    else:
+        return reqd
+
     
 def get_state_desc(gs):#debug
     gst = [ 'Session is live and players can join',

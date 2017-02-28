@@ -83,7 +83,8 @@ class Win_Main:
         self.This_win.after(700,self.TED_Event)
 
     def update_players(self):
-        Playername_data = net.URL_getplayers(Setting.gpin,Setting.apin)
+        Playername_data = net.URL_getplayers(Setting.gpin)#,Setting.apin)
+        print(Playername_data)
         self.player1_label_LBL_VAR.set(Playername_data[0])
         self.player2_label_LBL_VAR.set(Playername_data[1])
         self.player3_label_LBL_VAR.set(Playername_data[2])
