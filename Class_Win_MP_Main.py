@@ -77,6 +77,9 @@ class Win_Main_MP:
         link6_lbl = Label(self.votelink_LF,text = "player6's link",textvariable = self.linkvote_player6)
 
         linkvoter_BTN = Button(self.votelink_LF,text = 'Vote on your link!',command = self.sub_votedfor_link)
+
+        self.winninglink_LF = LabelFrame(self.This_win,text = 'link voting options')
+        wlink_openlink_but = Button(self.winninglink_LF,text = 'open link',command = self.open_winning)
         
         misc_LF = LabelFrame(self.This_win,text = 'misc')
         self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_session,state = DISABLED)
@@ -119,6 +122,9 @@ class Win_Main_MP:
         link6_lbl.grid(row = 6,column = 1)
         linkvoter_BTN.grid(row = 7,column = 0)
 
+        self.winninglink_LF.pack()
+        wlink_openlink_but.grid(row=0,column=0)
+        
         misc_LF.pack()
         self.ADMIN_closesession_BUT.pack()
         self.Leave_session_BTN.pack()
@@ -306,7 +312,17 @@ class Win_Main_MP:
                     print('Suc')
                 else:
                     print('sub of link failed',votedata,varraypos,votedlink,resp)
-                    
+    def open_winning(self):
+        #get and open winning link
+        LINK = Ted_Network.URL_getwinning(Setting.gpin)
+        if LINK[0] == 'F':
+            print('invalid selection')
+        else:
+            print(LINK,'WINNER!!!')
+            if messagebox.askokcancel('winning link','the winning link is'+str(LINK[1])+'\nclick ok to open'):
+                webbrowser.open(LINK[1])
+    
+    
     def ask_redoround(self):
         pass
     
