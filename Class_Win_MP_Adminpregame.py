@@ -84,14 +84,41 @@ class Win_Main:
 
     def update_players(self):
         Playername_data = net.URL_getplayers(Setting.gpin)#,Setting.apin)
-        print(Playername_data)
+        print('RAW:',Playername_data)
+        Playername_data = self.processlinkdata(Playername_data)
+
+        if Playername_data == ['']:
+            Playername_data = ['A:Empty Slot']
+        for x in range(6 - len(Playername_data)):
+            Playername_data.append('Empty Slot')
+            
         self.player1_label_LBL_VAR.set(Playername_data[0])
         self.player2_label_LBL_VAR.set(Playername_data[1])
         self.player3_label_LBL_VAR.set(Playername_data[2])
         self.player4_label_LBL_VAR.set(Playername_data[3])
         self.player5_label_LBL_VAR.set(Playername_data[4])
         self.player6_label_LBL_VAR.set(Playername_data[5])
-
+        
+    def processlinkdata(self,lstring):##processes array format as string to array/list
+        xarray = []
+        arraybuffer = ''
+        if lstring == '[]':
+            print('empty array returned')
+            return ['']
+        for x in range(len(lstring)):
+            if lstring[x] in '[]':
+                print('array delimiters')
+                if lstring[x] == ']':
+                    xarray.append(arraybuffer)
+                    arraybuffer = ''
+                
+            elif lstring[x] == ',':
+                xarray.append(arraybuffer)
+                arraybuffer = ''
+            else:
+                arraybuffer = arraybuffer + lstring[x]
+        return xarray
+    
     def session_close(self):
         dat = net.URL_closesession(Setting.gpin,Setting.apin)
         print('session closed:',dat)

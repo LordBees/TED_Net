@@ -40,6 +40,7 @@ class Win_Main_MP:
         self.linkvote_player4 = StringVar()
         self.linkvote_player5 = StringVar()
         self.linkvote_player6 = StringVar()
+        
         #end
 
         ##widgets
@@ -75,6 +76,8 @@ class Win_Main_MP:
         link5_lbl = Label(self.votelink_LF,text = "player5's link",textvariable = self.linkvote_player5)
         link6_lbl = Label(self.votelink_LF,text = "player6's link",textvariable = self.linkvote_player6)
 
+        linkvoter_BTN = Button(self.votelink_LF,text = 'Vote on your link!',command = self.sub_votedfor_link)
+        
         misc_LF = LabelFrame(self.This_win,text = 'misc')
         self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_session,state = DISABLED)
         self.Leave_session_BTN = Button(misc_LF,text = 'leavesession\nsession', command = self.leavesession)
@@ -114,9 +117,11 @@ class Win_Main_MP:
         link4_lbl.grid(row = 4,column = 1)
         link5_lbl.grid(row = 5,column = 1)
         link6_lbl.grid(row = 6,column = 1)
+        linkvoter_BTN.grid(row = 7,column = 0)
 
         misc_LF.pack()
         self.ADMIN_closesession_BUT.pack()
+        self.Leave_session_BTN.pack()
         
         ##end
         Menu_main = Menu(self.This_win)
@@ -163,7 +168,8 @@ class Win_Main_MP:
         else:
             print('gamestate error')
         ##move into gamestate bracket when done
-        self.regetlinks()
+        ##self.regetlinks()
+        self.processlinkgetter()
         ##
 
         self.This_win.after(700, self.event_TED)
@@ -255,11 +261,75 @@ class Win_Main_MP:
             print('error occurred')
             print('sub',sub)
 
-    def regetlinks(Self):
+    def regetlinks(Self):##gets links for voting
         #data = net.URL_getlinks(Setting.gpin)
         data = Ted_Network.URL_getlinks(Setting.gpin)
         print(data)
+        return data
+        
+    def processlinkgetter(self):##process updating of getting window
+        
+        linkdata = self.processlinkdata(self.regetlinks()[1])
+        print(linkdata)
+        if linkdata == ['']:
+            linkdata = ['No link selected']
+        for x in range(6 - len(linkdata)):
+            linkdata.append('No link selected')
+        print('@@@@@@@@@@@@@\n',linkdata,'\n@@@@@@@@@@@@@@')
+        self.linkvote_player1.set(linkdata[0])
+        self.linkvote_player2.set(linkdata[1])
+        self.linkvote_player3.set(linkdata[2])
+        self.linkvote_player4.set(linkdata[3])
+        self.linkvote_player5.set(linkdata[4])
+        self.linkvote_player6.set(linkdata[5])
+        
+    def sub_votedfor_link(self):
+        ##button function to submit link for voting
+        ##if self.
+        varraypos = self.linkvote_Radio.get()-1#votearraypos
 
+        if varraypos == -1:
+            print('invalid entry')
+        else:
+            votedata = self.processlinkdata(self.regetlinks()[1])
+            if votedata == ['']:
+                votedata = ['No link selected']
+            for x in range(6 - len(votedata)):
+                votedata.append('No link selected')
+            print(votedata[varraypos],' <> chosen:::')
+            votedlink = votedata[varraypos]
+            if votedlink == 'No link selected':
+                print('link not valid No link selected')
+            else:##submit voting request
+                resp = Ted_Network.URL_votelink(str(Setting.gpin),str(Setting.ppin),str(varraypos+1))
+                if 'S' in resp:
+                    print('Suc')
+                else:
+                    print('sub of link failed',votedata,varraypos,votedlink,resp)
+                    
+    def ask_redoround(self):
+        pass
+    
+    def processlinkdata(self,lstring):##processes array format as string to array/list
+        xarray = []
+        arraybuffer = ''
+        if lstring == '[]':
+            print('empty array returned')
+            return ['']
+        for x in range(len(lstring)):
+            if lstring[x] in '[]':
+                print('array delimiters')
+                if lstring[x] == ']':
+                    xarray.append(arraybuffer)
+                    arraybuffer = ''
+                
+            elif lstring[x] == ',':
+                xarray.append(arraybuffer)
+                arraybuffer = ''
+            else:
+                arraybuffer = arraybuffer + lstring[x]
+        return xarray
+    
     def openrng(self):##button funct
         #global gennedlink
         #global settings
@@ -285,10 +355,11 @@ class Win_Main_MP:
     
     def leavesession(self):
         if Setting.ADMIN == True:
-            if messagebox.askokcancel('Are you sure?','CLose session by leaving?'):
-                pass
+            if messagebox.askokcancel('Are you sure?','ADMIN:Close session by leaving?'):
+                ##pass
+                self.close_session()
+                
         else:
-
             if messagebox.askokcancel('Are you sure?','leave session?'):
                 leave_DBG = Ted_Network.URL_leavegame(Setting.gpin,Setting.ppin)
                 print('left session: data',leave_DBG)

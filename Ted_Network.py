@@ -161,13 +161,17 @@ def URL_getplayers(gpin):#,apin):
     #return['player1','player2','player3','player4','player5','player6']
     jstr = '?f=list&l=gplayers&gid='+gpin
     reqd = URL_GetData(jstr)
-    reqd = URL_Datproc(reqd)
+    #reqd = URL_Datproc(reqd)
+    reqd = reqd.decode(ENCODER)
+    reqd = reqd.strip('\n')
     #reqd = reqd.stri
-    reqd = reqd[1]
+    ##reqd = reqd[1]
+    ##reqd = reqd[2:]
     if reqd[0] == 'F':
         return ['ERROR',reqd]#debugginf
     else:
-        return reqd
+        print('td:',reqd)
+        return reqd[2:]
 
 
 def URL_nolinks(gpin):
