@@ -59,8 +59,17 @@ def URL_startsession(gpin,apin):
     else:
         return reqd
 
-def URL_newround(gpin,ppin):
-    jstr = '?f=nrnd&gid='+gpin+'&pid='+ppin
+#def URL_newround(gpin,ppin):
+#    jstr = '?f=nrnd&gid='+gpin+'&pid='+ppin
+#    reqd = URL_GetData(jstr)
+#    reqd = URL_Datproc(reqd)
+#    if reqd[0] == 'F':
+#        return ['ERROR',reqd]#debugginf
+#    else:
+#        return reqd
+
+def URL_newround(gpin,apin):
+    jstr = '?f=nrnd&gid='+gpin+'&pin='+apin
     reqd = URL_GetData(jstr)
     reqd = URL_Datproc(reqd)
     if reqd[0] == 'F':

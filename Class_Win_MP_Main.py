@@ -11,7 +11,7 @@ import Class_Win_Howto,Class_Win_MP_Howto
 import Class_Win_MP_Customchoose,Class_Win_MP_mpgameinfo
 
 #wins
-import Class_Win_MP_Lobby
+import Class_Win_MP_Lobby, Class_Win_MP_Adminpregame
 
 #ted misc
 import Ted_Links,Ted_Network
@@ -20,12 +20,13 @@ import Ted_Settings as Setting
 
 class Win_Main_MP:
     ##
-
+    ##reboot_gamestate = False## for restarting session if gamestate is requested as 0
+    last_gamestate = 0##gamestate tracker for reset
     ##
     def __init__(self):
         self.This_win = Tk()
         self.This_win.title('Link Roulette - Session')#add id to this
-        self.This_win.geometry('305x300')
+        self.This_win.geometry('305x650')
 
         #varinit
         self.linktype_Radio = IntVar()
@@ -56,7 +57,7 @@ class Win_Main_MP:
         pick_link_LBL = Label(self.SendLink_LF,text = 'your link:')
         picked_link_LBL = Label(self.SendLink_LF,text = '',textvariable = self.gennedlink)
 
-        sublink_BUT = Button(self.This_win,text = 'submit',command = self.sublink_proc)
+        self.sublink_BUT = Button(self.This_win,text = 'submit',command = self.sublink_proc)
 
         self.votelink_LF = LabelFrame(self.This_win,text = 'vote')
         votelink_LF_LBL = Label(self.votelink_LF,text ='pick a link')
@@ -80,10 +81,12 @@ class Win_Main_MP:
 
         self.winninglink_LF = LabelFrame(self.This_win,text = 'link voting options')
         wlink_openlink_but = Button(self.winninglink_LF,text = 'open link',command = self.open_winning)
+        wlink_openlinkscrape_but = Button(self.winninglink_LF,text = 'open link(strip http(s))',command = self.open_winning_scrape)##open_winning_scrape
         
         misc_LF = LabelFrame(self.This_win,text = 'misc')
-        self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_session,state = DISABLED)
+        self.ADMIN_closesession_BUT = Button(misc_LF,text = 'ADMIN Close\nsession',command = self.close_sess_BTN,state = DISABLED)##was close_session
         self.Leave_session_BTN = Button(misc_LF,text = 'leavesession\nsession', command = self.leavesession)
+        self.ADMIN_restartsession_BUT = Button(misc_LF,text = 'ADMIN new\nsession',command = self.redo_sess_BTN,state = DISABLED)##was close_session
 
         #packing
         self.SendLink_LF.pack()
@@ -97,7 +100,7 @@ class Win_Main_MP:
         pick_link_LBL.pack()
         picked_link_LBL.pack()
 
-        sublink_BUT.pack()
+        self.sublink_BUT.pack()
 
         self.votelink_LF.pack()
         votelink_LF_LBL.grid(row = 0,column = 0)#.pack()
@@ -124,10 +127,12 @@ class Win_Main_MP:
 
         self.winninglink_LF.pack()
         wlink_openlink_but.grid(row=0,column=0)
+        wlink_openlinkscrape_but.grid(row=0,column=1)
         
         misc_LF.pack()
         self.ADMIN_closesession_BUT.pack()
         self.Leave_session_BTN.pack()
+        self.ADMIN_restartsession_BUT.pack()
         
         ##end
         Menu_main = Menu(self.This_win)
@@ -151,8 +156,10 @@ class Win_Main_MP:
         self.This_win.after(700, self.event_TED)
         #print('test')
         self.This_win.mainloop()
+
     def __del__(self):
         if Setting.InGame == True:
+            Setting.InGame = False#added here
             self.leavesession()
 
     def event_TED(self):
@@ -160,31 +167,54 @@ class Win_Main_MP:
         ##print(self.linktype_Radio.get())
         gamestate = str(Ted_Network.URL_request_State(Setting.gpin))
         print('state:',gamestate)
-        gamestate = str(gamestate[0])
+        #gamestate = str(gamestate[0])
+        gamestate = str(gamestate[2])##is not array so hack for taking number
+        print('statex:',gamestate)
+        ##self.last_gamestate = int(gamestate)
         if gamestate == '0':
-            pass
+            ##if self.reboot_gamestate == True:##allows for admin to reset clients
+            if self.last_gamestate >= 3:
+            
+                self.This_win.destroy()
+                if Setting.ADMIN == True:
+                    ##Class_Win_MP_Adminpregame.Win_Main()
+                    print('rebooting session')
+                    start = Ted_Network.URL_startsession(Setting.gpin,Setting.apin)
+                    print('start:\n',start,'\n====')
+                else:
+                    print('ignored admin part')
+                Setting.InGame = True
+                Win_Main_MP()
+               
+                
+
         elif gamestate == '1':
             pass
         elif gamestate == '2':
-            pass
+            self.processlinkgetter()
         elif gamestate == '3':
+            ##self.reboot_gamestate = True
             pass
         elif gamestate == '4':
-            pass
+            self.reboot_gamestate = True
         else:
             print('gamestate error')
+        self.last_gamestate = int(gamestate)
         ##move into gamestate bracket when done
         ##self.regetlinks()
-        self.processlinkgetter()
+        
+        ##self.processlinkgetter()##moved to state 2
         ##
 
         self.This_win.after(700, self.event_TED)
 
     def do_Setup(self):##preloop stuff
         self.disable_voting()
-        if Setting.ADMIN == True:
+        self.disable_openwinning()
+        if Setting.ADMIN == True:#enable admin options
             self.This_win.title('Link Roulette - Session Admin')#add id to this
             self.ADMIN_closesession_BUT.config(state = 'normal')
+            self.ADMIN_restartsession_BUT.config(state = 'normal')
 
     def linkpicker(self):
         #global settings
@@ -249,6 +279,16 @@ class Win_Main_MP:
         for child in self.SendLink_LF.winfo_children():
             child.configure(state='disable')
 
+    def enable_openwinning(self):##enable link open widgets
+        print('enabled!')
+        for child in self.winninglink_LF.winfo_children():
+            child.configure(state='normal')
+
+    def disable_openwinning(self):##disable link open widgets
+        print('disabled!')
+        for child in self.winninglink_LF.winfo_children():
+            child.configure(state='disable')
+
     def sublink_proc(self):
         sub = Ted_Network.URL_sublink(Setting.gpin,Setting.ppin,self.gennedlink.get())
         print('subdat',sub)
@@ -262,6 +302,7 @@ class Win_Main_MP:
         elif sub[0].upper() == 'S':
             self.disable_gen()
             self.enable_voting()
+            self.sublink_BUT.config(state = 'disable')##disable submit button additionally
             print('sub sucess!!')
         else:
             print('error occurred')
@@ -309,19 +350,40 @@ class Win_Main_MP:
             else:##submit voting request
                 resp = Ted_Network.URL_votelink(str(Setting.gpin),str(Setting.ppin),str(varraypos+1))
                 if 'S' in resp:
-                    print('Suc')
+                    print('Success in voting!')
+                    self.enable_openwinning()
+                    self.disable_voting()
                 else:
-                    print('sub of link failed',votedata,varraypos,votedlink,resp)
+                    print('sub of link failed error data',votedata,varraypos,votedlink,resp)
+
     def open_winning(self):
         #get and open winning link
         LINK = Ted_Network.URL_getwinning(Setting.gpin)
         if LINK[0] == 'F':
-            print('invalid selection')
+            messagebox.showinfo('erroropening winning link!', 'the winning link hasnt been decided yet!')
+            print('invalid selection/link not ready yet')
+        else:
+            print(LINK,'WINNER!!!')
+            if messagebox.askokcancel('winning link','the winning link is'+str(LINK[1])+'\nclick ok to open'):
+                ##if 'https://' in LINK[1]:
+                ##    LINK[1] = LINK[1][
+                webbrowser.open(LINK[1])
+
+    def open_winning_scrape(self):
+        #get and open winning link
+        LINK = Ted_Network.URL_getwinning(Setting.gpin)
+        if 'https://' in LINK[1]:
+            LINK[1] = LINK[1][8:]
+        elif 'http://' in LINK[1]:
+            LINK[1] = LINK[1][7:]
+
+        if LINK[0] == 'F':
+            messagebox.showinfo('erroropening winning link!', 'the winning link hasnt been decided yet!')
+            print('invalid selection/link not ready yet')
         else:
             print(LINK,'WINNER!!!')
             if messagebox.askokcancel('winning link','the winning link is'+str(LINK[1])+'\nclick ok to open'):
                 webbrowser.open(LINK[1])
-    
     
     def ask_redoround(self):
         pass
@@ -360,6 +422,15 @@ class Win_Main_MP:
         else:
             if messagebox.askokcancel(title = 'confirm open',message = 'are you sure\nthere is NO guaruntee the link will be safe!'):
                 webbrowser.open(self.gennedlink.get())
+
+    def close_sess_BTN(self):
+        if messagebox.askokcancel('are you sure?','Close the session?'):
+            self.close_session()
+    def redo_sess_BTN(self):
+        ##if self.reboot_gamestate == True:
+        if messagebox.askokcancel('are you sure?','create new session?'):
+            resp =Ted_Network.URL_newround(Setting.gpin,Setting.apin)
+            print(Setting.gpin,Setting.apin,':',resp)
 
     def close_session(self):
         Ted_Network.URL_closesession(Setting.gpin,Setting.apin)
