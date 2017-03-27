@@ -199,6 +199,7 @@ class Win_Main_MP:
             pass
         elif gamestate == '4':
             ##self.reboot_gamestate = True
+            pass
         else:
             print('gamestate error')
         self.last_gamestate = int(gamestate)
