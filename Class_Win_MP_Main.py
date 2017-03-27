@@ -170,10 +170,13 @@ class Win_Main_MP:
         #gamestate = str(gamestate[0])
         gamestate = str(gamestate[2])##is not array so hack for taking number
         print('statex:',gamestate)
-        ##self.last_gamestate = int(gamestate)
+        ##self.last_gamestate = int(gamestate
         if gamestate == '0':
+            pass
+        elif gamestate == '1':
             ##if self.reboot_gamestate == True:##allows for admin to reset clients
             if self.last_gamestate >= 3:
+                ##input('restart')
             
                 self.This_win.destroy()
                 if Setting.ADMIN == True:
@@ -188,15 +191,14 @@ class Win_Main_MP:
                
                 
 
-        elif gamestate == '1':
-            pass
+        
         elif gamestate == '2':
             self.processlinkgetter()
         elif gamestate == '3':
             ##self.reboot_gamestate = True
             pass
         elif gamestate == '4':
-            self.reboot_gamestate = True
+            ##self.reboot_gamestate = True
         else:
             print('gamestate error')
         self.last_gamestate = int(gamestate)
@@ -429,8 +431,8 @@ class Win_Main_MP:
     def redo_sess_BTN(self):
         ##if self.reboot_gamestate == True:
         if messagebox.askokcancel('are you sure?','create new session?'):
-            resp =Ted_Network.URL_newround(Setting.gpin,Setting.apin)
-            print(Setting.gpin,Setting.apin,':',resp)
+            resp = Ted_Network.URL_newround(Setting.gpin,Setting.apin)
+            print('REBOOTING',Setting.gpin,Setting.apin,':',resp)
 
     def close_session(self):
         Ted_Network.URL_closesession(Setting.gpin,Setting.apin)
