@@ -50,7 +50,7 @@ class Window:
                     'labelled as open link,',
                     'the open link(strip http(s)) button removes the http:// part of',
                     'the link as some  older browsers may not work properly with the',
-                    ' http(s) part removed',
+                    'http(s) part removed',
                     '',
                     'misc options:',
                     'ADMIN Close session - forces the session to close and disables',
@@ -67,7 +67,7 @@ class Window:
         ##helpwin = TK.Tk()##debigging win as seperate entity
         helpwin = TK.Toplevel()
         helpwin.title("useful information (MP help)")
-        helpwin.geometry('355x480')
+        helpwin.geometry('365x480')
         helpwin_lblframe = TK.LabelFrame(helpwin, text="User Guide for MP")
         helpwin_lblframe.pack(fill="both", expand="yes")
      

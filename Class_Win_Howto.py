@@ -32,7 +32,7 @@ class Window:
         ##helpwin = TK.Tk()##debigging win as seperate entity
         helpwin = TK.Toplevel()
         helpwin.title("useful information")
-        helpwin.geometry('320x480')
+        helpwin.geometry('365x480')
         helpwin_lblframe = TK.LabelFrame(helpwin, text="User guide for SP")
         helpwin_lblframe.pack(fill="both", expand="yes")
      
