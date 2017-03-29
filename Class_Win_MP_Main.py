@@ -26,7 +26,7 @@ class Win_Main_MP:
     def __init__(self):
         self.This_win = Tk()
         self.This_win.title('Link Roulette - Session')#add id to this
-        self.This_win.geometry('305x650')
+        self.This_win.geometry('305x665')
 
         #varinit
         self.linktype_Radio = IntVar()

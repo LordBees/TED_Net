@@ -99,7 +99,7 @@ class Win_Main:
         self.on_run()
         self.root.config(menu=Menu_main)#title = 'Link Roulette'
         self.root.title('Link Roulette')
-        self.root.geometry('305x300')
+        self.root.geometry('305x360')
         self.root.after(700, self.event_TED)
         self.root.mainloop()
         self.on_close()
